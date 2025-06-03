@@ -1,0 +1,122 @@
+<?php
+require_once '../conexion.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $usuario = $_POST['usuario'] ?? '';
+    $contrasena = $_POST['contrasena'] ?? '';
+
+    try {
+        $stmt = $pdo->prepare("EXEC ValidarInicioSesion ?, ?, ?");
+        $pagina = null;
+        $stmt->bindParam(1, $usuario);
+        $stmt->bindParam(2, $contrasena);
+        $stmt->bindParam(3, $pagina, PDO::PARAM_INPUT_OUTPUT, 255);
+
+        $stmt->execute();
+
+        if ($pagina) {
+            header("Location: $pagina");
+            exit;
+        } else {
+            echo "<script>alert('Usuario o contraseña incorrectos');</script>";
+        }
+    } catch (PDOException $e) {
+        die("Error ejecutando el procedimiento: " . $e->getMessage());
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - Herrería RR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap & MDB CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background-color: #2f2f2f;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .login-card {
+      background-color: #ffffff;
+      border-radius: 1rem;
+      padding: 3rem;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .form-control {
+      background-color: #f7f7f7;
+      border: 1px solid #ccc;
+      color: #333;
+    }
+
+    .form-control:focus {
+      border-color: #ff8c00;
+      box-shadow: 0 0 0 0.2rem rgba(255, 140, 0, 0.25);
+    }
+
+    .btn-orange {
+      background-color: #ff8c00;
+      color: white;
+    }
+
+    .btn-orange:hover {
+      background-color: #e67600;
+    }
+
+    label {
+      color: #555;
+    }
+
+    .text-warning {
+      color: #ff8c00 !important;
+    }
+  </style>
+</head>
+<body>
+
+<section class="vh-100 d-flex align-items-center justify-content-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="login-card">
+          <h3 class="text-center text-warning mb-4 fw-bold">RR Herrería</h3>
+          <p class="text-center mb-4">Inicia sesión en tu cuenta</p>
+
+          <form method="POST" action="">
+            <div class="form-outline mb-4">
+              <input type="email" name="usuario" id="formUsuario" class="form-control" required />
+              <label class="form-label" for="formUsuario">Usuario</label>
+            </div>
+
+            <div class="form-outline mb-4">
+              <input type="password" name="contrasena" id="formPass" class="form-control" required />
+              <label class="form-label" for="formPass">Contraseña</label>
+            </div>
+
+            <div class="d-grid mb-3">
+              <button class="btn btn-orange" type="submit">Iniciar Sesión</button>
+            </div>
+
+            <div class="text-center">
+              <a class="text-muted small" href="#">¿Olvidaste tu contraseña?</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bootstrap & MDB JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+
+</body>
+</html>

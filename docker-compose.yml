@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: php_apache
+    ports:
+      - "8081:80"
+    volumes:
+      - ./www:/var/www/html
+    networks:
+      - my_network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver_container
+    environment:
+      - SA_PASSWORD=TuPassword123!
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
+

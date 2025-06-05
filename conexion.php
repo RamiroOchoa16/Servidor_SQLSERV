@@ -1,5 +1,5 @@
 <?php
-$dsn = "sqlsrv:Server=sqlserver_container,1433;Database=ProyectoHerreriaUG";
+$dsn = "sqlsrv:Server=sqlserver_container,1433;Database=HerreriaRR";
 $user = "sa";
 $password = "TuPassword123!";
 
@@ -12,5 +12,4 @@ try {
 }
 
 
-?>
 
